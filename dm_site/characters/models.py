@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 
+
 class Character(models.Model):
     CHARACTER_TYPE_CHOICES = [
         ('player', 'Player'),
@@ -17,3 +18,15 @@ class Character(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.get_character_type_display()})"
+
+
+class InventoryItem(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    quantity = models.PositiveIntegerField(default=1)
+    character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name='inventory_items')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.name} x{self.quantity} ({self.character.name})"
