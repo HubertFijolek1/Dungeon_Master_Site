@@ -18,3 +18,15 @@ class Campaign(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Session(models.Model):
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='sessions')
+    date = models.DateField()
+    time = models.TimeField()
+    notes = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Session on {self.date} at {self.time}"
