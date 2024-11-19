@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from .models import Campaign, Session
-from .serializers import CampaignSerializer, SessionSerializer
+from .models import Campaign, Session, Milestone
+from .serializers import CampaignSerializer, SessionSerializer, MilestoneSerializer
 
 class CampaignViewSet(viewsets.ModelViewSet):
     queryset = Campaign.objects.all()
@@ -14,4 +14,9 @@ class CampaignViewSet(viewsets.ModelViewSet):
 class SessionViewSet(viewsets.ModelViewSet):
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+class MilestoneViewSet(viewsets.ModelViewSet):
+    queryset = Milestone.objects.all()
+    serializer_class = MilestoneSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
