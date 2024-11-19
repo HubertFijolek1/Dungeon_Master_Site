@@ -1,15 +1,13 @@
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, TemplateView, View
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .models import Campaign, Session, Milestone, Participant
-from .serializers import CampaignSerializer, SessionSerializer, MilestoneSerializer, ParticipantSerializer
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import CampaignForm, SessionForm, MilestoneForm, ParticipantInviteForm
-from django.shortcuts import get_object_or_404, render, redirect
-from django.views import View
+from .serializers import CampaignSerializer, SessionSerializer, MilestoneSerializer, ParticipantSerializer
 
-
-
+# REST Framework ViewSets
 class CampaignViewSet(viewsets.ModelViewSet):
     queryset = Campaign.objects.all()
     serializer_class = CampaignSerializer
@@ -33,6 +31,7 @@ class ParticipantViewSet(viewsets.ModelViewSet):
     serializer_class = ParticipantSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
+# Django Views
 class CampaignListView(ListView):
     model = Campaign
     template_name = 'campaigns/campaign_list.html'
@@ -70,7 +69,6 @@ class CampaignUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         campaign = self.get_object()
         return self.request.user == campaign.owner
-
 
 class SessionListView(ListView):
     model = Session

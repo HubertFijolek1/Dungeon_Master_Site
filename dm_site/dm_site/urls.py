@@ -12,10 +12,7 @@ def health_check(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home_view, name='campaigns.urls'),
+    path('', include('campaigns.urls')),
+    path('api/', include('campaigns.api_urls')),  # For API endpoints
     path('health/', health_check, name='health_check'),
-    path('api/', include('campaigns.urls')),
-    # path('campaigns/', include('campaigns.urls')),
-    # path('characters/', include('characters.urls')),
-    # path('world/', include('world.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

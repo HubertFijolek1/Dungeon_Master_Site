@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 
+
 class Campaign(models.Model):
     STATUS_CHOICES = [
         ('active', 'Active'),
@@ -41,6 +42,7 @@ class Milestone(models.Model):
 
     def __str__(self):
         return f"{self.title} on {self.date}"
+
 
 class Participant(models.Model):
     ROLE_CHOICES = [

@@ -4,6 +4,21 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+class CampaignForm(forms.ModelForm):
+    class Meta:
+        model = Campaign
+        fields = ['name', 'description', 'status']
+
+class SessionForm(forms.ModelForm):
+    class Meta:
+        model = Session
+        fields = ['date', 'time', 'notes']
+
+class MilestoneForm(forms.ModelForm):
+    class Meta:
+        model = Milestone
+        fields = ['title', 'description', 'date']
+
 class ParticipantInviteForm(forms.Form):
     username = forms.CharField(max_length=150, help_text="Enter the username of the user to invite.")
 
@@ -22,21 +37,6 @@ class ParticipantInviteForm(forms.Form):
         return user
 
     def save(self):
-        user = self.cleaned_data['username']
+        user = User.objects.get(username=self.cleaned_data['username'])
         participant = Participant.objects.create(campaign=self.campaign, user=user, role='player')
         return participant
-
-class CampaignForm(forms.ModelForm):
-    class Meta:
-        model = Campaign
-        fields = ['name', 'description', 'status']
-
-class SessionForm(forms.ModelForm):
-    class Meta:
-        model = Session
-        fields = ['date', 'time', 'notes']
-
-class MilestoneForm(forms.ModelForm):
-    class Meta:
-        model = Milestone
-        fields = ['title', 'description', 'date']
