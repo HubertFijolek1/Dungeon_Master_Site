@@ -1,8 +1,0 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<h1>{{ campaign.name }}</h1>
-<p>{{ campaign.description }}</p>
-<p>Status: {{ campaign.get_status_display }}</p>
-<p>Owner: {{ campaign.owner.username }}</p>
-{% endblock %}

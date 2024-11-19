@@ -16,6 +16,9 @@ RUN pip install -r requirements.txt
 # Copy project
 COPY . /code/
 
+# Debug: List files in /code/ to verify manage.py exists
+RUN ls -la /code/
+
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
