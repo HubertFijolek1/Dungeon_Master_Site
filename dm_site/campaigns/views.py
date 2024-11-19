@@ -38,6 +38,13 @@ class CampaignListView(ListView):
     template_name = 'campaigns/campaign_list.html'
     context_object_name = 'campaigns'
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('q', '')
+        if search_query:
+            queryset = queryset.filter(name__icontains=search_query) | queryset.filter(owner__username__icontains=search_query)
+        return queryset
+
 class CampaignDetailView(DetailView):
     model = Campaign
     template_name = 'campaigns/campaign_detail.html'

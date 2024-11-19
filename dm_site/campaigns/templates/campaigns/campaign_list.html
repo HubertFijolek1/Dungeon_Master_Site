@@ -2,12 +2,18 @@
 
 {% block content %}
 <h1>Campaigns</h1>
+<form method="get">
+    <input type="text" name="q" placeholder="Search campaigns" value="{{ request.GET.q }}">
+    <button type="submit">Search</button>
+</form>
 <ul>
     {% for campaign in campaigns %}
     <li>
         <a href="{% url 'campaign_detail' campaign.id %}">{{ campaign.name }}</a>
         by {{ campaign.owner.username }}
     </li>
+    {% empty %}
+    <li>No campaigns found.</li>
     {% endfor %}
 </ul>
 {% endblock %}
