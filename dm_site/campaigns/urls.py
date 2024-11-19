@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
 from django.urls import path
-from .views import DMDashboardView
+from .views import DMDashboardView, PlayerDashboardView
 
 
 from .views import (
@@ -21,6 +21,7 @@ from .views import (
 #     path('milestone/<int:pk>/', MilestoneDetailView.as_view(), name='milestone_detail'),
 #     path('campaign/<int:campaign_id>/invite/', ParticipantInviteView.as_view(), name='participant_invite'),
 #     path('dm/dashboard/', DMDashboardView.as_view(), name='dm_dashboard'),
+#     path('player/dashboard/', PlayerDashboardView.as_view(), name='player_dashboard'),
 
 # ]
 

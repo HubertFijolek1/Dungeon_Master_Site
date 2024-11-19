@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Player Dashboard</h1>
+<h2>Campaigns You're Participating In</h2>
+<ul>
+    {% for participation in participations %}
+    <li>
+        <a href="{% url 'campaign_detail' participation.campaign.id %}">{{ participation.campaign.name }}</a>
+    </li>
+    {% empty %}
+    <li>You are not participating in any campaigns.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

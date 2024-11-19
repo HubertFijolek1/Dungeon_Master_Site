@@ -137,3 +137,11 @@ class DMDashboardView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['campaigns'] = Campaign.objects.filter(owner=self.request.user)
         return context
+
+class PlayerDashboardView(LoginRequiredMixin, TemplateView):
+    template_name = 'campaigns/player_dashboard.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['participations'] = Participant.objects.filter(user=self.request.user, role='player')
+        return context
