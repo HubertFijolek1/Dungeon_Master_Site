@@ -14,7 +14,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view, name='home'),
     path('health/', health_check, name='health_check'),
-    # path('api/', include('api.urls')),  # Placeholder for future APIs
+    path('api/', include('campaigns.urls')),
     # path('campaigns/', include('campaigns.urls')),
     # path('characters/', include('characters.urls')),
     # path('world/', include('world.urls')),
