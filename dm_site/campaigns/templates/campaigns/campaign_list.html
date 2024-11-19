@@ -4,7 +4,13 @@
 <h1>Campaigns</h1>
 <form method="get">
     <input type="text" name="q" placeholder="Search campaigns" value="{{ request.GET.q }}">
-    <button type="submit">Search</button>
+    <select name="status">
+        <option value="">All Statuses</option>
+        <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>Active</option>
+        <option value="completed" {% if request.GET.status == 'completed' %}selected{% endif %}>Completed</option>
+        <option value="paused" {% if request.GET.status == 'paused' %}selected{% endif %}>Paused</option>
+    </select>
+    <button type="submit">Filter</button>
 </form>
 <ul>
     {% for campaign in campaigns %}

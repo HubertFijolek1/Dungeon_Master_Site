@@ -41,8 +41,11 @@ class CampaignListView(ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         search_query = self.request.GET.get('q', '')
+        status_filter = self.request.GET.get('status', '')
         if search_query:
             queryset = queryset.filter(name__icontains=search_query) | queryset.filter(owner__username__icontains=search_query)
+        if status_filter:
+            queryset = queryset.filter(status=status_filter)
         return queryset
 
 class CampaignDetailView(DetailView):
