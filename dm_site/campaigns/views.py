@@ -129,3 +129,11 @@ class ParticipantInviteView(LoginRequiredMixin, UserPassesTestMixin, View):
     def test_func(self):
         campaign = get_object_or_404(Campaign, pk=self.kwargs['campaign_id'])
         return self.request.user == campaign.owner
+
+class DMDashboardView(LoginRequiredMixin, TemplateView):
+    template_name = 'campaigns/dm_dashboard.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['campaigns'] = Campaign.objects.filter(owner=self.request.user)
+        return context

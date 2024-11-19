@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>DM Dashboard</h1>
+<h2>Your Campaigns</h2>
+<ul>
+    {% for campaign in campaigns %}
+    <li>
+        <a href="{% url 'campaign_detail' campaign.id %}">{{ campaign.name }}</a>
+    </li>
+    {% empty %}
+    <li>You have no campaigns.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
