@@ -41,3 +41,20 @@ class Milestone(models.Model):
 
     def __str__(self):
         return f"{self.title} on {self.date}"
+
+class Participant(models.Model):
+    ROLE_CHOICES = [
+        ('dm', 'Dungeon Master'),
+        ('player', 'Player'),
+    ]
+
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='participants')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='participations')
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='player')
+    joined_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('campaign', 'user')
+
+    def __str__(self):
+        return f"{self.user.username} as {self.get_role_display()} in {self.campaign.name}"
