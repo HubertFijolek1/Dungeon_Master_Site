@@ -4,7 +4,9 @@ from .models import Campaign, Session, Milestone, Participant
 from .serializers import CampaignSerializer, SessionSerializer, MilestoneSerializer, ParticipantSerializer
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import CampaignForm
+from .forms import CampaignForm, SessionForm
+from django.shortcuts import get_object_or_404
+
 
 class CampaignViewSet(viewsets.ModelViewSet):
     queryset = Campaign.objects.all()
@@ -55,3 +57,23 @@ class CampaignUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_queryset(self):
         return Campaign.objects.filter(owner=self.request.user)
+
+
+class SessionListView(ListView):
+    model = Session
+    template_name = 'campaigns/session_list.html'
+    context_object_name = 'sessions'
+
+    def get_queryset(self):
+        self.campaign = get_object_or_404(Campaign, pk=self.kwargs['campaign_id'])
+        return Session.objects.filter(campaign=self.campaign)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['campaign'] = self.campaign
+        return context
+
+class SessionDetailView(DetailView):
+    model = Session
+    template_name = 'campaigns/session_detail.html'
+    context_object_name = 'session'
