@@ -4,8 +4,10 @@ from .models import Campaign, Session, Milestone, Participant
 from .serializers import CampaignSerializer, SessionSerializer, MilestoneSerializer, ParticipantSerializer
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .forms import CampaignForm, SessionForm, MilestoneForm
-from django.shortcuts import get_object_or_404
+from .forms import CampaignForm, SessionForm, MilestoneForm, ParticipantInviteForm
+from django.shortcuts import get_object_or_404, render, redirect
+from django.views import View
+
 
 
 class CampaignViewSet(viewsets.ModelViewSet):
@@ -97,3 +99,23 @@ class MilestoneDetailView(DetailView):
     model = Milestone
     template_name = 'campaigns/milestone_detail.html'
     context_object_name = 'milestone'
+
+class ParticipantInviteView(LoginRequiredMixin, UserPassesTestMixin, View):
+    template_name = 'campaigns/participant_invite.html'
+
+    def get(self, request, campaign_id):
+        campaign = get_object_or_404(Campaign, pk=campaign_id)
+        form = ParticipantInviteForm(campaign=campaign)
+        return render(request, self.template_name, {'form': form, 'campaign': campaign})
+
+    def post(self, request, campaign_id):
+        campaign = get_object_or_404(Campaign, pk=campaign_id)
+        form = ParticipantInviteForm(request.POST, campaign=campaign)
+        if form.is_valid():
+            form.save()
+            return redirect('campaign_detail', pk=campaign_id)
+        return render(request, self.template_name, {'form': form, 'campaign': campaign})
+
+    def test_func(self):
+        campaign = get_object_or_404(Campaign, pk=self.kwargs['campaign_id'])
+        return self.request.user == campaign.owner
