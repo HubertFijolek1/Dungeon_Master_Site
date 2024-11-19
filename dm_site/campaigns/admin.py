@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Campaign, Session, Milestone
+from .models import Campaign, Session, Milestone, Participant
 
 class CampaignAdmin(admin.ModelAdmin):
     list_display = ('name', 'owner', 'status', 'created_at')
@@ -16,6 +16,12 @@ class MilestoneAdmin(admin.ModelAdmin):
     search_fields = ('campaign__name', 'title')
     list_filter = ('date',)
 
+class ParticipantAdmin(admin.ModelAdmin):
+    list_display = ('user', 'campaign', 'role', 'joined_at')
+    search_fields = ('user__username', 'campaign__name')
+    list_filter = ('role', 'joined_at')
+
 admin.site.register(Campaign, CampaignAdmin)
 admin.site.register(Session, SessionAdmin)
 admin.site.register(Milestone, MilestoneAdmin)
+admin.site.register(Participant, ParticipantAdmin)
