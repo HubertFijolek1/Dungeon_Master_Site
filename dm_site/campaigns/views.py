@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .models import Campaign, Session, Milestone, Participant
 from .serializers import CampaignSerializer, SessionSerializer, MilestoneSerializer, ParticipantSerializer
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .forms import CampaignForm, SessionForm, MilestoneForm
 from django.shortcuts import get_object_or_404
 
@@ -50,13 +50,14 @@ class CampaignCreateView(LoginRequiredMixin, CreateView):
         form.instance.owner = self.request.user
         return super().form_valid(form)
 
-class CampaignUpdateView(LoginRequiredMixin, UpdateView):
+class CampaignUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Campaign
     form_class = CampaignForm
     template_name = 'campaigns/campaign_form.html'
 
-    def get_queryset(self):
-        return Campaign.objects.filter(owner=self.request.user)
+    def test_func(self):
+        campaign = self.get_object()
+        return self.request.user == campaign.owner
 
 
 class SessionListView(ListView):
