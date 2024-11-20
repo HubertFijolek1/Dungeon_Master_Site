@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Character, InventoryItem
+from .models import Character, InventoryItem, Monster
 
 class CharacterAdmin(admin.ModelAdmin):
     list_display = ('name', 'character_type', 'campaign', 'created_at')
@@ -10,6 +10,12 @@ class InventoryItemAdmin(admin.ModelAdmin):
     list_display = ('name', 'quantity', 'character', 'created_at')
     search_fields = ('name', 'character__name')
     list_filter = ('character__campaign__status',)
+
+@admin.register(Monster)
+class MonsterAdmin(admin.ModelAdmin):
+    list_display = ('name', 'created_at')
+    search_fields = ('name',)
+    list_filter = ('created_at',)
 
 admin.site.register(Character, CharacterAdmin)
 admin.site.register(InventoryItem, InventoryItemAdmin)
