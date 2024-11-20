@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Milestones for {{ campaign.name }}</h1>
+<ul>
+    {% for milestone in milestones %}
+    <li>
+        <a href="{% url 'milestone_detail' milestone.id %}">{{ milestone.title }} on {{ milestone.date }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

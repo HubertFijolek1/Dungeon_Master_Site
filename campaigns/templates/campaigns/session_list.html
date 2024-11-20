@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Sessions for {{ campaign.name }}</h1>
+<ul>
+    {% for session in sessions %}
+    <li>
+        <a href="{% url 'session_detail' session.id %}">Session on {{ session.date }} at {{ session.time }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

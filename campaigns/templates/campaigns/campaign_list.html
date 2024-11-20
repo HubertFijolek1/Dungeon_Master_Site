@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Campaigns</h1>
+<form method="get">
+    <input type="text" name="q" placeholder="Search campaigns" value="{{ request.GET.q }}">
+    <select name="status">
+        <option value="">All Statuses</option>
+        <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>Active</option>
+        <option value="completed" {% if request.GET.status == 'completed' %}selected{% endif %}>Completed</option>
+        <option value="paused" {% if request.GET.status == 'paused' %}selected{% endif %}>Paused</option>
+    </select>
+    <button type="submit">Filter</button>
+</form>
+<ul>
+    {% for campaign in campaigns %}
+    <li>
+        <a href="{% url 'campaign_detail' campaign.id %}">{{ campaign.name }}</a>
+        by {{ campaign.owner.username }}
+    </li>
+    {% empty %}
+    <li>No campaigns found.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
