@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Characters</h1>
+<ul>
+    {% for character in characters %}
+    <li>
+        <a href="{% url 'character_detail' character.id %}">{{ character.name }}</a>
+    </li>
+    {% empty %}
+    <li>No characters available.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

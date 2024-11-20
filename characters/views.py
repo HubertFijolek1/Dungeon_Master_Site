@@ -1,6 +1,9 @@
 from rest_framework import viewsets, permissions
 from .models import Character, InventoryItem, Monster
 from .serializers import CharacterSerializer, InventoryItemSerializer, MonsterSerializer
+from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import CharacterForm
 
 class CharacterViewSet(viewsets.ModelViewSet):
     queryset = Character.objects.all()
@@ -19,3 +22,22 @@ class MonsterViewSet(viewsets.ModelViewSet):
     queryset = Monster.objects.all()
     serializer_class = MonsterSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class CharacterListView(ListView):
+    model = Character
+    template_name = 'characters/character_list.html'
+    context_object_name = 'characters'
+
+class CharacterDetailView(DetailView):
+    model = Character
+    template_name = 'characters/character_detail.html'
+    context_object_name = 'character'
+
+class CharacterCreateView(LoginRequiredMixin, CreateView):
+    model = Character
+    form_class = CharacterForm
+    template_name = 'characters/character_form.html'
+
+    def form_valid(self, form):
+        return super().form_valid(form)
