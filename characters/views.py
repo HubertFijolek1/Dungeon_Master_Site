@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions
-from .models import Character
-from .serializers import CharacterSerializer
+from .models import Character, InventoryItem
+from .serializers import CharacterSerializer, InventoryItemSerializer
 
 class CharacterViewSet(viewsets.ModelViewSet):
     queryset = Character.objects.all()
@@ -9,3 +9,8 @@ class CharacterViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save()
+
+class InventoryItemViewSet(viewsets.ModelViewSet):
+    queryset = InventoryItem.objects.all()
+    serializer_class = InventoryItemSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
