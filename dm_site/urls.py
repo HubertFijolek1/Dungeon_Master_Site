@@ -16,4 +16,5 @@ urlpatterns = [
     path('api/', include('campaigns.api_urls')),
     path('health/', health_check, name='health_check'),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('characters/', include('characters.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
