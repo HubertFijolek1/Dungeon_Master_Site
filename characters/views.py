@@ -3,7 +3,7 @@ from .models import Character, InventoryItem, Monster
 from .serializers import CharacterSerializer, InventoryItemSerializer, MonsterSerializer
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import CharacterForm
+from .forms import CharacterForm, InventoryItemForm
 
 class CharacterViewSet(viewsets.ModelViewSet):
     queryset = Character.objects.all()
@@ -40,4 +40,21 @@ class CharacterCreateView(LoginRequiredMixin, CreateView):
     template_name = 'characters/character_form.html'
 
     def form_valid(self, form):
+        return super().form_valid(form)
+
+class InventoryItemListView(ListView):
+    model = InventoryItem
+    template_name = 'characters/inventoryitem_list.html'
+    context_object_name = 'inventory_items'
+
+    def get_queryset(self):
+        return InventoryItem.objects.filter(character_id=self.kwargs['character_id'])
+
+class InventoryItemCreateView(LoginRequiredMixin, CreateView):
+    model = InventoryItem
+    form_class = InventoryItemForm
+    template_name = 'characters/inventoryitem_form.html'
+
+    def form_valid(self, form):
+        form.instance.character_id = self.kwargs['character_id']
         return super().form_valid(form)

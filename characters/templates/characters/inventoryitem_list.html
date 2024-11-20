@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Inventory for {{ character.name }}</h1>
+<ul>
+    {% for item in inventory_items %}
+    <li>{{ item.name }} x{{ item.quantity }}</li>
+    {% empty %}
+    <li>No items in inventory.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
