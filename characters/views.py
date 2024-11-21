@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions
 from .models import Character, InventoryItem, Monster
 from .serializers import CharacterSerializer, InventoryItemSerializer, MonsterSerializer
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import CharacterForm, InventoryItemForm
 
@@ -66,3 +66,13 @@ class InventoryItemCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.character_id = self.kwargs['character_id']
         return super().form_valid(form)
+
+class CharacterDashboardView(LoginRequiredMixin, TemplateView):
+    template_name = 'characters/character_dashboard.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        campaign_id = self.kwargs.get('campaign_id')
+        context['campaign'] = get_object_or_404(Campaign, id=campaign_id)
+        context['characters'] = Character.objects.filter(campaign_id=campaign_id)
+        return context

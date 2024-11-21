@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Character Dashboard for {{ campaign.name }}</h1>
+<h2>Your Characters</h2>
+<ul>
+    {% for character in characters %}
+    <li>
+        <a href="{% url 'character_detail' character.id %}">{{ character.name }}</a>
+    </li>
+    {% empty %}
+    <li>No characters in this campaign.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
