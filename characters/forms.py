@@ -1,5 +1,5 @@
 from django import forms
-from .models import Character, InventoryItem
+from .models import Character, InventoryItem, Monster
 
 class CharacterForm(forms.ModelForm):
     class Meta:
@@ -10,3 +10,8 @@ class InventoryItemForm(forms.ModelForm):
     class Meta:
         model = InventoryItem
         fields = ['name', 'description', 'quantity']
+
+class MonsterForm(forms.ModelForm):
+    class Meta:
+        model = Monster
+        fields = ['name', 'stats', 'lore', 'campaign']

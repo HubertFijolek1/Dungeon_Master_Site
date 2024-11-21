@@ -1,5 +1,4 @@
 from django.db import models
-from django.conf import settings
 from campaigns.models import Campaign
 
 class Character(models.Model):
@@ -12,22 +11,12 @@ class Character(models.Model):
     character_type = models.CharField(max_length=10, choices=CHARACTER_TYPE_CHOICES, default='player')
     attributes = models.JSONField(default=dict, blank=True)
     backstory = models.TextField(blank=True)
-    campaign = models.ForeignKey('campaigns.Campaign', on_delete=models.CASCADE, related_name='characters')
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='characters')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.name} ({self.get_character_type_display()})"
-
-class Monster(models.Model):
-    name = models.CharField(max_length=255)
-    stats = models.JSONField(default=dict, blank=True)
-    lore = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name
 
 class InventoryItem(models.Model):
     name = models.CharField(max_length=255)
@@ -39,3 +28,14 @@ class InventoryItem(models.Model):
 
     def __str__(self):
         return f"{self.name} x{self.quantity} ({self.character.name})"
+
+class Monster(models.Model):
+    name = models.CharField(max_length=255)
+    stats = models.JSONField(default=dict, blank=True)
+    lore = models.TextField(blank=True)
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='monsters', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
