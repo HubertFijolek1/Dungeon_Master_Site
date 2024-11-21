@@ -8,6 +8,8 @@ from .views import (
     CharacterDashboardView,
 )
 
+app_name = 'characters'
+
 router = DefaultRouter()
 router.register(r'characters-api', CharacterViewSet)
 router.register(r'inventory-items-api', InventoryItemViewSet)
@@ -18,20 +20,20 @@ urlpatterns = [
     path('api/', include(router.urls)),
 
     # Character URLs
-    path('characters/', CharacterListView.as_view(), name='character_list'),
-    path('characters/<int:pk>/', CharacterDetailView.as_view(), name='character_detail'),
-    path('campaigns/<int:campaign_id>/characters/create/', CharacterCreateView.as_view(), name='character_create'),
+    path('', CharacterListView.as_view(), name='character_list'),
+    path('<int:pk>/', CharacterDetailView.as_view(), name='character_detail'),
+    path('create/<int:campaign_id>/', CharacterCreateView.as_view(), name='character_create'),
 
     # InventoryItem URLs
-    path('characters/<int:character_id>/inventory/', InventoryItemListView.as_view(), name='inventoryitem_list'),
-    path('characters/<int:character_id>/inventory/add/', InventoryItemCreateView.as_view(), name='inventoryitem_add'),
+    path('<int:character_id>/inventory/', InventoryItemListView.as_view(), name='inventoryitem_list'),
+    path('<int:character_id>/inventory/add/', InventoryItemCreateView.as_view(), name='inventoryitem_add'),
 
     # Monster URLs
     path('monsters/', MonsterListView.as_view(), name='monster_list'),
     path('monsters/<int:pk>/', MonsterDetailView.as_view(), name='monster_detail'),
-    path('campaigns/<int:campaign_id>/monsters/', MonsterListView.as_view(), name='campaign_monster_list'),
-    path('campaigns/<int:campaign_id>/monsters/create/', MonsterCreateView.as_view(), name='monster_create'),
+    path('monsters/campaign/<int:campaign_id>/', MonsterListView.as_view(), name='campaign_monster_list'),
+    path('monsters/create/<int:campaign_id>/', MonsterCreateView.as_view(), name='monster_create'),
 
     # Character Dashboard
-    path('campaigns/<int:campaign_id>/characters/dashboard/', CharacterDashboardView.as_view(), name='character_dashboard'),
+    path('dashboard/<int:campaign_id>/', CharacterDashboardView.as_view(), name='character_dashboard'),
 ]

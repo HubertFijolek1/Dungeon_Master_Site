@@ -3,6 +3,7 @@ from django.urls import path, include
 from django.http import JsonResponse
 from django.conf import settings
 from django.conf.urls.static import static
+from campaigns.views import DMDashboardView, PlayerDashboardView
 
 def home_view(request):
     return JsonResponse({"message": "Dungeon Master Website API"}, status=200)
@@ -12,9 +13,12 @@ def health_check(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('campaigns.urls')),
+    path('', home_view, name='home'),
+    path('campaigns/', include(('campaigns.urls', 'campaigns'), namespace='campaigns')),
+    path('characters/', include(('characters.urls', 'characters'), namespace='characters')),  # Include characters URLs with namespace
     path('api/', include('campaigns.api_urls')),
     path('health/', health_check, name='health_check'),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('characters/', include('characters.urls'))
+    path('dm/dashboard/', DMDashboardView.as_view(), name='dm_dashboard'),
+    path('player/dashboard/', PlayerDashboardView.as_view(), name='player_dashboard'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
