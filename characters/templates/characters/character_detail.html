@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Characters</h1>
+<form method="get">
+    <input type="text" name="q" placeholder="Search characters" value="{{ request.GET.q }}">
+    <button type="submit">Search</button>
+</form>
+<ul>
+    {% for character in characters %}
+    <li>
+        <a href="{% url 'character_detail' character.id %}">{{ character.name }}</a> ({{ character.get_character_type_display }})
+    </li>
+    {% empty %}
+    <li>No characters found.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

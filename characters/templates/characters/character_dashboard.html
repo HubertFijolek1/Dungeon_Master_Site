@@ -12,4 +12,5 @@
     <li>No characters in this campaign.</li>
     {% endfor %}
 </ul>
+<a href="{% url 'character_create' campaign.id %}">Create New Character</a>
 {% endblock %}

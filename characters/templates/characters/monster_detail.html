@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ monster.name }}</h1>
+<p>Stats: {{ monster.stats }}</p>
+<p>Lore: {{ monster.lore }}</p>
+{% if monster.campaign %}
+<p>Campaign: <a href="{% url 'campaign_detail' monster.campaign.id %}">{{ monster.campaign.name }}</a></p>
+{% endif %}
+{% endblock %}

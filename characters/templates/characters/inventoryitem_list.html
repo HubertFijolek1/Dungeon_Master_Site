@@ -9,4 +9,5 @@
     <li>No items in inventory.</li>
     {% endfor %}
 </ul>
+<a href="{% url 'inventoryitem_add' character.id %}">Add Inventory Item</a>
 {% endblock %}
