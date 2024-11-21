@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from campaigns.models import Campaign
 
 class Character(models.Model):
     CHARACTER_TYPE_CHOICES = [

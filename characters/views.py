@@ -40,6 +40,7 @@ class CharacterCreateView(LoginRequiredMixin, CreateView):
     template_name = 'characters/character_form.html'
 
     def form_valid(self, form):
+        form.instance.campaign_id = self.kwargs['campaign_id']
         return super().form_valid(form)
 
 class InventoryItemListView(ListView):

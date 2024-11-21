@@ -14,4 +14,6 @@ urlpatterns = [
     path('characters/create/', CharacterCreateView.as_view(), name='character_create'),
     path('characters/<int:character_id>/inventory/', InventoryItemListView.as_view(), name='inventoryitem_list'),
     path('characters/<int:character_id>/inventory/add/', InventoryItemCreateView.as_view(), name='inventoryitem_add'),
+    path('campaigns/<int:campaign_id>/characters/create/', CharacterCreateView.as_view(), name='character_create'),
+
 ]
