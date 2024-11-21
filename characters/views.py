@@ -55,7 +55,7 @@ class CharacterCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('character_detail', kwargs={'pk': self.object.pk})
+        return reverse_lazy('characters:character_detail', kwargs={'pk': self.object.pk})
 
 class InventoryItemListView(ListView):
     model = InventoryItem

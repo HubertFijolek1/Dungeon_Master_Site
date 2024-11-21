@@ -9,7 +9,7 @@
 <ul>
     {% for character in characters %}
     <li>
-        <a href="{% url 'character_detail' character.id %}">{{ character.name }}</a> ({{ character.get_character_type_display }})
+        <a href="{% url 'characters:character_detail' character.id %}">{{ character.name }}</a>
     </li>
     {% empty %}
     <li>No characters found.</li>
