@@ -29,6 +29,13 @@ class CharacterListView(ListView):
     template_name = 'characters/character_list.html'
     context_object_name = 'characters'
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('q', '')
+        if search_query:
+            queryset = queryset.filter(name__icontains=search_query)
+        return queryset
+
 class CharacterDetailView(DetailView):
     model = Character
     template_name = 'characters/character_detail.html'
