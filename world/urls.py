@@ -1,6 +1,9 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import MapViewSet, LocationViewSet, LoreViewSet, TimelineEventViewSet
+from .views import (
+    MapViewSet, LocationViewSet, LoreViewSet, TimelineEventViewSet,
+    MapListView, MapDetailView, MapCreateView,
+)
 
 router = DefaultRouter()
 router.register(r'maps', MapViewSet)
@@ -12,4 +15,9 @@ app_name = 'world'
 
 urlpatterns = [
     path('api/', include(router.urls)),
+
+# Map URLs
+    path('maps/', MapListView.as_view(), name='map_list'),
+    path('maps/<int:pk>/', MapDetailView.as_view(), name='map_detail'),
+    path('maps/create/', MapCreateView.as_view(), name='map_create'),
 ]

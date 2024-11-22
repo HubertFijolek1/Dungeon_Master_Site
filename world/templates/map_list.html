@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Maps</h1>
+<a href="{% url 'world:map_create' %}">Create New Map</a>
+<ul>
+    {% for map in maps %}
+    <li>
+        <a href="{% url 'world:map_detail' map.id %}">{{ map.name }}</a>
+    </li>
+    {% empty %}
+    <li>No maps available.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
