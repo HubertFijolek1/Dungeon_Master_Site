@@ -1,28 +1,12 @@
+from django.shortcuts import render, get_object_or_404
+from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework import viewsets, permissions
 from .models import Map, Location, Lore, TimelineEvent
 from .serializers import MapSerializer, LocationSerializer, LoreSerializer, TimelineEventSerializer
-from django.views.generic import ListView, DetailView, CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import MapForm, LoreForm, TimelineEventForm
+from .forms import MapForm, LocationForm, LoreForm, TimelineEventForm
 
-class TimelineEventListView(ListView):
-    model = TimelineEvent
-    template_name = 'world/timelineevent_list.html'
-    context_object_name = 'events'
-    ordering = ['date']
-
-class TimelineEventDetailView(DetailView):
-    model = TimelineEvent
-    template_name = 'world/timelineevent_detail.html'
-    context_object_name = 'event'
-
-class TimelineEventCreateView(LoginRequiredMixin, CreateView):
-    model = TimelineEvent
-    form_class = TimelineEventForm
-    template_name = 'world/timelineevent_form.html'
-
-    def form_valid(self, form):
-        return super().form_valid(form)
+# REST Framework ViewSets
 
 class MapViewSet(viewsets.ModelViewSet):
     queryset = Map.objects.all()
@@ -44,6 +28,9 @@ class TimelineEventViewSet(viewsets.ModelViewSet):
     serializer_class = TimelineEventSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+# Django Views
+
+# Map Views
 class MapListView(ListView):
     model = Map
     template_name = 'world/map_list.html'
@@ -62,6 +49,26 @@ class MapCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         return super().form_valid(form)
 
+# Location Views
+class LocationListView(ListView):
+    model = Location
+    template_name = 'world/location_list.html'
+    context_object_name = 'locations'
+
+class LocationDetailView(DetailView):
+    model = Location
+    template_name = 'world/location_detail.html'
+    context_object_name = 'location'
+
+class LocationCreateView(LoginRequiredMixin, CreateView):
+    model = Location
+    form_class = LocationForm
+    template_name = 'world/location_form.html'
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+# Lore Views
 class LoreListView(ListView):
     model = Lore
     template_name = 'world/lore_list.html'
@@ -76,6 +83,26 @@ class LoreCreateView(LoginRequiredMixin, CreateView):
     model = Lore
     form_class = LoreForm
     template_name = 'world/lore_form.html'
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+# TimelineEvent Views
+class TimelineEventListView(ListView):
+    model = TimelineEvent
+    template_name = 'world/timelineevent_list.html'
+    context_object_name = 'events'
+    ordering = ['date']
+
+class TimelineEventDetailView(DetailView):
+    model = TimelineEvent
+    template_name = 'world/timelineevent_detail.html'
+    context_object_name = 'event'
+
+class TimelineEventCreateView(LoginRequiredMixin, CreateView):
+    model = TimelineEvent
+    form_class = TimelineEventForm
+    template_name = 'world/timelineevent_form.html'
 
     def form_valid(self, form):
         return super().form_valid(form)

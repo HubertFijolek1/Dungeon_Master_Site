@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ map.name }}</h1>
+{% if map.image %}
+    <img src="{{ map.image.url }}" alt="{{ map.name }}" style="max-width: 100%;">
+{% else %}
+    <p>No map image available.</p>
+{% endif %}
+
+<h2>Locations on this Map</h2>
+<ul>
+    {% for location in map.locations.all %}
+    <li>
+        <a href="{% url 'world:location_detail' location.id %}">{{ location.name }}</a>
+    </li>
+    {% empty %}
+    <li>No locations on this map.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

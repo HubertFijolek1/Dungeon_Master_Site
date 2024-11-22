@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Event on {{ event.date }}</h1>
+<p>{{ event.description }}</p>
+{% if event.related_lore %}
+<p>Related Lore: <a href="{% url 'world:lore_detail' event.related_lore.id %}">{{ event.related_lore.title }}</a></p>
+{% endif %}
+{% endblock %}

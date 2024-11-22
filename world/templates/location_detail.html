@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ location.name }}</h1>
+<p>{{ location.description }}</p>
+<p>Map: <a href="{% url 'world:map_detail' location.map.id %}">{{ location.map.name }}</a></p>
+
+<h2>Lore Entries</h2>
+<ul>
+    {% for lore in location.lore_entries.all %}
+    <li>
+        <a href="{% url 'world:lore_detail' lore.id %}">{{ lore.title }}</a>
+    </li>
+    {% empty %}
+    <li>No lore entries for this location.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

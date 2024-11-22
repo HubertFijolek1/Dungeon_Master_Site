@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Map, Location,Lore, TimelineEvent
+from .models import Map, Location, Lore, TimelineEvent
 
 @admin.register(Map)
 class MapAdmin(admin.ModelAdmin):
@@ -18,10 +18,6 @@ class LoreAdmin(admin.ModelAdmin):
     list_display = ('title', 'related_location', 'created_at')
     search_fields = ('title', 'content')
     list_filter = ('created_at',)
-
-    def related_location_name(self, obj):
-        return obj.related_location.name if obj.related_location else 'N/A'
-    related_location_name.short_description = 'Related Location'
 
 @admin.register(TimelineEvent)
 class TimelineEventAdmin(admin.ModelAdmin):
