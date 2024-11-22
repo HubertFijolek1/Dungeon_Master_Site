@@ -15,7 +15,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view, name='home'),
     path('campaigns/', include(('campaigns.urls', 'campaigns'), namespace='campaigns')),
-    path('characters/', include(('characters.urls', 'characters'), namespace='characters')),  # Include characters URLs with namespace
+    path('characters/', include(('characters.urls', 'characters'), namespace='characters')),
+    path('world/', include(('world.urls', 'world'), namespace='world')),
     path('api/', include('campaigns.api_urls')),
     path('health/', health_check, name='health_check'),
     path('accounts/', include('django.contrib.auth.urls')),
