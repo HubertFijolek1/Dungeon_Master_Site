@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Lore Entries</h1>
+<a href="{% url 'world:lore_create' %}">Create New Lore Entry</a>
+<ul>
+    {% for lore in lore_entries %}
+    <li>
+        <a href="{% url 'world:lore_detail' lore.id %}">{{ lore.title }}</a>
+    </li>
+    {% empty %}
+    <li>No lore entries available.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

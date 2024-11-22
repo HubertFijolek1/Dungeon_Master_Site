@@ -3,7 +3,7 @@ from .models import Map, Location, Lore, TimelineEvent
 from .serializers import MapSerializer, LocationSerializer, LoreSerializer, TimelineEventSerializer
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import MapForm
+from .forms import MapForm, LoreForm
 
 
 class MapViewSet(viewsets.ModelViewSet):
@@ -40,6 +40,24 @@ class MapCreateView(LoginRequiredMixin, CreateView):
     model = Map
     form_class = MapForm
     template_name = 'world/map_form.html'
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+class LoreListView(ListView):
+    model = Lore
+    template_name = 'world/lore_list.html'
+    context_object_name = 'lore_entries'
+
+class LoreDetailView(DetailView):
+    model = Lore
+    template_name = 'world/lore_detail.html'
+    context_object_name = 'lore'
+
+class LoreCreateView(LoginRequiredMixin, CreateView):
+    model = Lore
+    form_class = LoreForm
+    template_name = 'world/lore_form.html'
 
     def form_valid(self, form):
         return super().form_valid(form)

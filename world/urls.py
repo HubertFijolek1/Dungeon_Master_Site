@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     MapViewSet, LocationViewSet, LoreViewSet, TimelineEventViewSet,
     MapListView, MapDetailView, MapCreateView,
+    LoreListView, LoreDetailView, LoreCreateView,
 )
 
 router = DefaultRouter()
@@ -20,4 +21,9 @@ urlpatterns = [
     path('maps/', MapListView.as_view(), name='map_list'),
     path('maps/<int:pk>/', MapDetailView.as_view(), name='map_detail'),
     path('maps/create/', MapCreateView.as_view(), name='map_create'),
+
+    # Lore URLs
+    path('lore/', LoreListView.as_view(), name='lore_list'),
+    path('lore/<int:pk>/', LoreDetailView.as_view(), name='lore_detail'),
+    path('lore/create/', LoreCreateView.as_view(), name='lore_create'),
 ]
