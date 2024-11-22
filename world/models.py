@@ -20,3 +20,15 @@ class Location(models.Model):
 
     def __str__(self):
         return self.name
+
+class Lore(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    related_location = models.ForeignKey(
+        Location, on_delete=models.SET_NULL, related_name='lore_entries', null=True, blank=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
