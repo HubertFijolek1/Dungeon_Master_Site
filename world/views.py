@@ -3,8 +3,26 @@ from .models import Map, Location, Lore, TimelineEvent
 from .serializers import MapSerializer, LocationSerializer, LoreSerializer, TimelineEventSerializer
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import MapForm, LoreForm
+from .forms import MapForm, LoreForm, TimelineEventForm
 
+class TimelineEventListView(ListView):
+    model = TimelineEvent
+    template_name = 'world/timelineevent_list.html'
+    context_object_name = 'events'
+    ordering = ['date']
+
+class TimelineEventDetailView(DetailView):
+    model = TimelineEvent
+    template_name = 'world/timelineevent_detail.html'
+    context_object_name = 'event'
+
+class TimelineEventCreateView(LoginRequiredMixin, CreateView):
+    model = TimelineEvent
+    form_class = TimelineEventForm
+    template_name = 'world/timelineevent_form.html'
+
+    def form_valid(self, form):
+        return super().form_valid(form)
 
 class MapViewSet(viewsets.ModelViewSet):
     queryset = Map.objects.all()

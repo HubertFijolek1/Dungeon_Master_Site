@@ -1,5 +1,10 @@
 from django import forms
-from .models import Map, Lore
+from .models import Map, Lore, TimelineEvent
+
+class TimelineEventForm(forms.ModelForm):
+    class Meta:
+        model = TimelineEvent
+        fields = ['date', 'description', 'related_lore']
 
 class LoreForm(forms.ModelForm):
     class Meta:

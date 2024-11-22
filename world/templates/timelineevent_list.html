@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Timeline Events</h1>
+<a href="{% url 'world:timelineevent_create' %}">Create New Event</a>
+<ul>
+    {% for event in events %}
+    <li>
+        <a href="{% url 'world:timelineevent_detail' event.id %}">
+            {{ event.date }}: {{ event.description|truncatewords:10 }}
+        </a>
+    </li>
+    {% empty %}
+    <li>No events available.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

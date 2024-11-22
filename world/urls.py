@@ -4,6 +4,7 @@ from .views import (
     MapViewSet, LocationViewSet, LoreViewSet, TimelineEventViewSet,
     MapListView, MapDetailView, MapCreateView,
     LoreListView, LoreDetailView, LoreCreateView,
+    TimelineEventListView, TimelineEventDetailView, TimelineEventCreateView
 )
 
 router = DefaultRouter()
@@ -17,7 +18,7 @@ app_name = 'world'
 urlpatterns = [
     path('api/', include(router.urls)),
 
-# Map URLs
+    # Map URLs
     path('maps/', MapListView.as_view(), name='map_list'),
     path('maps/<int:pk>/', MapDetailView.as_view(), name='map_detail'),
     path('maps/create/', MapCreateView.as_view(), name='map_create'),
@@ -26,4 +27,9 @@ urlpatterns = [
     path('lore/', LoreListView.as_view(), name='lore_list'),
     path('lore/<int:pk>/', LoreDetailView.as_view(), name='lore_detail'),
     path('lore/create/', LoreCreateView.as_view(), name='lore_create'),
+
+    # TimelineEvent URLs
+    path('timeline/', TimelineEventListView.as_view(), name='timelineevent_list'),
+    path('timeline/<int:pk>/', TimelineEventDetailView.as_view(), name='timelineevent_detail'),
+    path('timeline/create/', TimelineEventCreateView.as_view(), name='timelineevent_create'),
 ]
