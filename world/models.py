@@ -32,3 +32,15 @@ class Lore(models.Model):
 
     def __str__(self):
         return self.title
+
+class TimelineEvent(models.Model):
+    date = models.DateField()
+    description = models.TextField()
+    related_lore = models.ForeignKey(
+        Lore, on_delete=models.SET_NULL, related_name='timeline_events', null=True, blank=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Event on {self.date}: {self.description[:50]}"
