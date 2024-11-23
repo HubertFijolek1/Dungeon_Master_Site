@@ -16,7 +16,7 @@ class Location(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     map = models.ForeignKey(Map, on_delete=models.CASCADE, related_name='locations')
-    coordinates = models.CharField(max_length=100, blank=True)  # Adjust as needed
+    coordinates = models.CharField(max_length=100, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

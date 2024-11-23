@@ -2,20 +2,26 @@
 
 {% block content %}
 <h1>{{ map.name }}</h1>
-{% if map.image %}
-    <img src="{{ map.image.url }}" alt="{{ map.name }}" style="max-width: 100%;">
-{% else %}
-    <p>No map image available.</p>
-{% endif %}
+<div id="map" style="height: 600px;"></div>
 
-<h2>Locations on this Map</h2>
-<ul>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+<script>
+    var map = L.map('map').setView([0, 0], 2);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
     {% for location in map.locations.all %}
-    <li>
-        <a href="{% url 'world:location_detail' location.id %}">{{ location.name }}</a>
-    </li>
-    {% empty %}
-    <li>No locations on this map.</li>
+        {% if location.coordinates %}
+            var coords = "{{ location.coordinates }}".split(',');
+            var latitude = parseFloat(coords[0].trim());
+            var longitude = parseFloat(coords[1].trim());
+            L.marker([latitude, longitude]).addTo(map)
+                .bindPopup('<a href="{% url "world:location_detail" location.id %}">{{ location.name }}</a>');
+        {% endif %}
     {% endfor %}
-</ul>
+</script>
 {% endblock %}
