@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'campaigns',
     'characters',
     'world',
+    'mechanics',
 ]
 
 MIDDLEWARE = [
