@@ -1,15 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Lore Entries</h1>
-<a href="{% url 'world:lore_create' %}">Create New Lore Entry</a>
+<h1>{{ lore.title }}</h1>
+<p>{{ lore.content }}</p>
+{% if lore.related_location %}
+<p>Related Location: <a href="{% url 'world:location_detail' lore.related_location.id %}">{{ lore.related_location.name }}</a></p>
+{% endif %}
+
+<h2>Related Timeline Events</h2>
 <ul>
-    {% for lore in lore_entries %}
+    {% for event in lore.timeline_events.all %}
     <li>
-        <a href="{% url 'world:lore_detail' lore.id %}">{{ lore.title }}</a>
+        <a href="{% url 'world:timelineevent_detail' event.id %}">{{ event.date }}: {{ event.description|truncatewords:10 }}</a>
     </li>
     {% empty %}
-    <li>No lore entries available.</li>
+    <li>No timeline events related to this lore entry.</li>
     {% endfor %}
 </ul>
 {% endblock %}
