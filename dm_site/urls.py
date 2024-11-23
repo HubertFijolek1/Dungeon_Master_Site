@@ -21,6 +21,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('dm/dashboard/', DMDashboardView.as_view(), name='dm_dashboard'),
     path('player/dashboard/', PlayerDashboardView.as_view(), name='player_dashboard'),
+    path('mechanics/', include(('mechanics.urls', 'mechanics'), namespace='mechanics')),
 ]
 
 if settings.DEBUG:
