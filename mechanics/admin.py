@@ -13,3 +13,9 @@ class EncounterAdmin(admin.ModelAdmin):
     search_fields = ('name', 'campaign__name')
     list_filter = ('difficulty', 'campaign')
     filter_horizontal = ('monsters',)
+
+@admin.register(Loot)
+class LootAdmin(admin.ModelAdmin):
+    list_display = ('name', 'type', 'value', 'encounter', 'created_at')
+    search_fields = ('name', 'description', 'encounter__name')
+    list_filter = ('type', 'encounter')
