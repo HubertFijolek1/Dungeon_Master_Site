@@ -4,10 +4,17 @@ from .models import Encounter, Loot
 class EncounterForm(forms.ModelForm):
     class Meta:
         model = Encounter
-        fields = ['name', 'description', 'difficulty', 'monsters']
+        fields = ['name', 'description', 'monsters']
         widgets = {
             'monsters': forms.CheckboxSelectMultiple(),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        monsters = cleaned_data.get('monsters')
+        if not monsters:
+            raise forms.ValidationError("You must select at least one monster.")
+        return cleaned_data
 
 class LootForm(forms.ModelForm):
     class Meta:
