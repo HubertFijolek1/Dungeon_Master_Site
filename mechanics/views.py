@@ -5,6 +5,52 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import EncounterForm, LootForm
 import random
+from django.urls import reverse_lazy
+from django.contrib import messages
+import re
+
+class DiceRollCreateView(LoginRequiredMixin, CreateView):
+    form_class = DiceRollForm
+    template_name = 'mechanics/diceroll_form.html'
+
+    def form_valid(self, form):
+        expression = form.cleaned_data['expression']
+        result = self.parse_dice_expression(expression)
+        if result is not None:
+            DiceRoll.objects.create(
+                roll_type=form.cleaned_data['roll_type'],
+                result=f"{expression} = {result}",
+                user=self.request.user,
+                campaign=self.request.user.campaigns.first(),  # Adjust as needed
+            )
+            messages.success(self.request, f"Roll result: {result}")
+            return super().form_valid(form)
+        else:
+            form.add_error('expression', 'Invalid dice expression.')
+            return self.form_invalid(form)
+
+    def parse_dice_expression(self, expression):
+        # Simple dice expression parser (e.g., '1d20+5')
+        dice_pattern = re.compile(r'(\d*)d(\d+)([+-]\d+)?')
+        match = dice_pattern.fullmatch(expression.replace(' ', ''))
+        if match:
+            num_dice = int(match.group(1) or 1)
+            dice_sides = int(match.group(2))
+            modifier = int(match.group(3) or 0)
+            total = sum(random.randint(1, dice_sides) for _ in range(num_dice)) + modifier
+            return total
+        return None
+
+    def get_success_url(self):
+        return reverse_lazy('mechanics:diceroll_list')
+
+class DiceRollListView(ListView):
+    model = DiceRoll
+    template_name = 'mechanics/diceroll_list.html'
+    context_object_name = 'dice_rolls'
+
+    def get_queryset(self):
+        return DiceRoll.objects.filter(user=self.request.user)
 
 class EncounterCreateView(LoginRequiredMixin, CreateView):
     model = Encounter

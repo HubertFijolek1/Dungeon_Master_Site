@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Your Dice Rolls</h1>
+<a href="{% url 'mechanics:diceroll_create' %}">Roll Dice</a>
+<ul>
+    {% for roll in dice_rolls %}
+    <li>{{ roll.timestamp }} - {{ roll.roll_type }}: {{ roll.result }}</li>
+    {% empty %}
+    <li>No dice rolls recorded.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -4,6 +4,7 @@ from .views import (
     DiceRollViewSet, EncounterViewSet, LootViewSet,
     EncounterListView, EncounterDetailView, EncounterCreateView,
     LootListView, LootDetailView, LootCreateView,
+    DiceRollCreateView, DiceRollListView,
 
 )
 
@@ -27,4 +28,8 @@ urlpatterns = [
     path('loot/', LootListView.as_view(), name='loot_list'),
     path('loot/<int:pk>/', LootDetailView.as_view(), name='loot_detail'),
     path('loot/create/', LootCreateView.as_view(), name='loot_create'),
+
+    # DiceRoll URLs
+    path('dice-rolls/', DiceRollListView.as_view(), name='diceroll_list'),
+    path('dice-rolls/roll/', DiceRollCreateView.as_view(), name='diceroll_create'),
 ]
