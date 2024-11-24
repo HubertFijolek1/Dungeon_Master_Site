@@ -9,6 +9,23 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 import re
 
+class EncounterListView(ListView):
+    model = Encounter
+    template_name = 'mechanics/encounter_list.html'
+    context_object_name = 'encounters'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        difficulty = self.request.GET.get('difficulty')
+        if difficulty:
+            queryset = queryset.filter(difficulty=difficulty)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['difficulty_levels'] = Encounter.DIFFICULTY_LEVELS
+        return context
+
 class DiceRollCreateView(LoginRequiredMixin, CreateView):
     form_class = DiceRollForm
     template_name = 'mechanics/diceroll_form.html'

@@ -1,25 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{{ encounter.name }}</h1>
-<p>{{ encounter.description }}</p>
-<p>Difficulty: {{ encounter.difficulty }}</p>
+<h1>Encounters</h1>
+<a href="{% url 'mechanics:encounter_create' %}">Create New Encounter</a>
 
-<h2>Monsters</h2>
+<form method="get">
+    <label for="difficulty">Filter by Difficulty:</label>
+    <select name="difficulty" id="difficulty">
+        <option value="">All</option>
+        {% for value, label in difficulty_levels %}
+        <option value="{{ value }}" {% if request.GET.difficulty == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Filter</button>
+</form>
+
 <ul>
-    {% for monster in encounter.monsters.all %}
-    <li>{{ monster.name }} (CR: {{ monster.challenge_rating }})</li>
+    {% for encounter in encounters %}
+    <li>
+        <a href="{% url 'mechanics:encounter_detail' encounter.id %}">{{ encounter.name }}</a> ({{ encounter.difficulty }})
+    </li>
     {% empty %}
-    <li>No monsters in this encounter.</li>
+    <li>No encounters available.</li>
     {% endfor %}
 </ul>
 {% endblock %}
-
-<h2>Loot</h2>
-<ul>
-    {% for loot in encounter.loot_items.all %}
-    <li>{{ loot.name }} (Type: {{ loot.type }}, Value: {{ loot.value }})</li>
-    {% empty %}
-    <li>No loot items for this encounter.</li>
-    {% endfor %}
-</ul>
