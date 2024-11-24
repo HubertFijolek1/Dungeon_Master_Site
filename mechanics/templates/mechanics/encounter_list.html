@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ encounter.name }}</h1>
+<p>{{ encounter.description }}</p>
+<p>Difficulty: {{ encounter.difficulty }}</p>
+
+<h2>Monsters</h2>
+<ul>
+    {% for monster in encounter.monsters.all %}
+    <li>{{ monster.name }} (CR: {{ monster.challenge_rating }})</li>
+    {% empty %}
+    <li>No monsters in this encounter.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

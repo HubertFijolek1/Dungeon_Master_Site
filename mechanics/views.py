@@ -5,6 +5,31 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import EncounterForm, LootForm
 
+class EncounterCreateView(LoginRequiredMixin, CreateView):
+    model = Encounter
+    form_class = EncounterForm
+    template_name = 'mechanics/encounter_form.html'
+
+    def form_valid(self, form):
+        form.instance.campaign = self.request.user.campaigns.first()  # Adjust as needed
+        response = super().form_valid(form)
+        # Implement logic to calculate difficulty based on selected monsters
+        self.object.difficulty = self.calculate_difficulty(self.object.monsters.all())
+        self.object.save()
+        return response
+
+    def calculate_difficulty(self, monsters):
+        # Placeholder logic
+        total_cr = sum(monster.challenge_rating for monster in monsters)
+        if total_cr < 5:
+            return 'easy'
+        elif total_cr < 10:
+            return 'medium'
+        elif total_cr < 15:
+            return 'hard'
+        else:
+            return 'deadly'
+
 # Loot Views
 class LootListView(ListView):
     model = Loot
