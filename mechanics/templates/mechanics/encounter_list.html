@@ -14,3 +14,12 @@
     {% endfor %}
 </ul>
 {% endblock %}
+
+<h2>Loot</h2>
+<ul>
+    {% for loot in encounter.loot_items.all %}
+    <li>{{ loot.name }} (Type: {{ loot.type }}, Value: {{ loot.value }})</li>
+    {% empty %}
+    <li>No loot items for this encounter.</li>
+    {% endfor %}
+</ul>

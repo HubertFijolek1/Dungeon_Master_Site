@@ -4,6 +4,7 @@ from .serializers import DiceRollSerializer, EncounterSerializer, LootSerializer
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import EncounterForm, LootForm
+import random
 
 class EncounterCreateView(LoginRequiredMixin, CreateView):
     model = Encounter
@@ -13,9 +14,11 @@ class EncounterCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.campaign = self.request.user.campaigns.first()  # Adjust as needed
         response = super().form_valid(form)
-        # Implement logic to calculate difficulty based on selected monsters
+        # Calculate difficulty
         self.object.difficulty = self.calculate_difficulty(self.object.monsters.all())
         self.object.save()
+        # Generate loot
+        self.generate_loot(self.object)
         return response
 
     def calculate_difficulty(self, monsters):
@@ -29,6 +32,22 @@ class EncounterCreateView(LoginRequiredMixin, CreateView):
             return 'hard'
         else:
             return 'deadly'
+
+    def generate_loot(self, encounter):
+        loot_types = {
+            'easy': [('gold', 50), ('potion', 1)],
+            'medium': [('gold', 100), ('weapon', 1)],
+            'hard': [('gold', 200), ('armor', 1), ('potion', 2)],
+            'deadly': [('gold', 500), ('weapon', 2), ('armor', 2), ('potion', 3)],
+        }
+        for loot_type, quantity in loot_types.get(encounter.difficulty, []):
+            for _ in range(quantity):
+                Loot.objects.create(
+                    name=f"Generated {loot_type.capitalize()}",
+                    type=loot_type,
+                    value=random.randint(10, 100),
+                    encounter=encounter
+                )
 
 # Loot Views
 class LootListView(ListView):
