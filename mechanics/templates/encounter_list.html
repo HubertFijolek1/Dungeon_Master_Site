@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Encounters</h1>
+<a href="{% url 'mechanics:encounter_create' %}">Create New Encounter</a>
+<ul>
+    {% for encounter in encounters %}
+    <li>
+        <a href="{% url 'mechanics:encounter_detail' encounter.id %}">{{ encounter.name }}</a> ({{ encounter.difficulty }})
+    </li>
+    {% empty %}
+    <li>No encounters available.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
