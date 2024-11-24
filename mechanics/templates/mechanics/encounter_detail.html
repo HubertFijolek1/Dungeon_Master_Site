@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ encounter.name }}</h1>
+<p>{{ encounter.description }}</p>
+<p>Difficulty: {{ encounter.get_difficulty_display }}</p>
+<p>Campaign: {{ encounter.campaign.name }}</p>
+
+<h2>Monsters</h2>
+<ul>
+    {% for monster in encounter.monsters.all %}
+    <li>{{ monster.name }} (CR: {{ monster.challenge_rating }})</li>
+    {% empty %}
+    <li>No monsters in this encounter.</li>
+    {% endfor %}
+</ul>
+
+<h2>Loot</h2>
+<ul>
+    {% for loot in encounter.loot_items.all %}
+    <li>{{ loot.name }} (Type: {{ loot.get_type_display }}, Value: {{ loot.value }})</li>
+    {% empty %}
+    <li>No loot items for this encounter.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

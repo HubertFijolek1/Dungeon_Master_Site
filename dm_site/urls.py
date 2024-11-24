@@ -17,11 +17,11 @@ urlpatterns = [
     path('campaigns/', include(('campaigns.urls', 'campaigns'), namespace='campaigns')),
     path('characters/', include(('characters.urls', 'characters'), namespace='characters')),
     path('world/', include(('world.urls', 'world'), namespace='world')),
+    path('mechanics/', include(('mechanics.urls', 'mechanics'), namespace='mechanics')),
     path('health/', health_check, name='health_check'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('dm/dashboard/', DMDashboardView.as_view(), name='dm_dashboard'),
     path('player/dashboard/', PlayerDashboardView.as_view(), name='player_dashboard'),
-    path('mechanics/', include(('mechanics.urls', 'mechanics'), namespace='mechanics')),
 ]
 
 if settings.DEBUG:

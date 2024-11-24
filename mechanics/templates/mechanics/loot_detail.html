@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ loot.name }}</h1>
+<p>{{ loot.description }}</p>
+<p>Type: {{ loot.get_type_display }}</p>
+<p>Value: {{ loot.value }}</p>
+<p>Encounter: <a href="{% url 'mechanics:encounter_detail' loot.encounter.id %}">{{ loot.encounter.name }}</a></p>
+{% endblock %}

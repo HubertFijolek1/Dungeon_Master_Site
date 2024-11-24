@@ -1,5 +1,9 @@
 from django import forms
-from .models import Encounter, Loot
+from .models import DiceRoll, Encounter, Loot
+
+class DiceRollForm(forms.Form):
+    roll_type = forms.ChoiceField(choices=DiceRoll.ROLL_TYPES, initial='custom')
+    expression = forms.CharField(max_length=50, help_text="Enter dice expression (e.g., '1d20+5')")
 
 class EncounterForm(forms.ModelForm):
     class Meta:
@@ -26,7 +30,3 @@ class LootForm(forms.ModelForm):
         if value < 0:
             raise forms.ValidationError("Value cannot be negative.")
         return value
-
-class DiceRollForm(forms.Form):
-    roll_type = forms.ChoiceField(choices=DiceRoll.ROLL_TYPES, initial='custom')
-    expression = forms.CharField(max_length=50, help_text="Enter dice expression (e.g., '1d20+5')")

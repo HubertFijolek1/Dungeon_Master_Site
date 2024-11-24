@@ -2,10 +2,9 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (
     DiceRollViewSet, EncounterViewSet, LootViewSet,
+    DiceRollCreateView, DiceRollListView,
     EncounterListView, EncounterDetailView, EncounterCreateView,
     LootListView, LootDetailView, LootCreateView,
-    DiceRollCreateView, DiceRollListView,
-
 )
 
 router = DefaultRouter()
@@ -19,6 +18,10 @@ urlpatterns = [
     # API URLs
     path('api/', include(router.urls)),
 
+    # DiceRoll URLs
+    path('dice-rolls/', DiceRollListView.as_view(), name='diceroll_list'),
+    path('dice-rolls/roll/', DiceRollCreateView.as_view(), name='diceroll_create'),
+
     # Encounter URLs
     path('encounters/', EncounterListView.as_view(), name='encounter_list'),
     path('encounters/<int:pk>/', EncounterDetailView.as_view(), name='encounter_detail'),
@@ -28,8 +31,4 @@ urlpatterns = [
     path('loot/', LootListView.as_view(), name='loot_list'),
     path('loot/<int:pk>/', LootDetailView.as_view(), name='loot_detail'),
     path('loot/create/', LootCreateView.as_view(), name='loot_create'),
-
-    # DiceRoll URLs
-    path('dice-rolls/', DiceRollListView.as_view(), name='diceroll_list'),
-    path('dice-rolls/roll/', DiceRollCreateView.as_view(), name='diceroll_create'),
 ]
