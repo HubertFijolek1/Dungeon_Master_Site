@@ -15,7 +15,7 @@ class DiceRoll(models.Model):
     ]
 
     roll_type = models.CharField(max_length=20, choices=ROLL_TYPES, default='custom')
-    result = models.CharField(max_length=50)  # You can use IntegerField if appropriate
+    result = models.CharField(max_length=50)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='dice_rolls')
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='dice_rolls')
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -38,6 +38,7 @@ class Encounter(models.Model):
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='encounters')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    # Additional fields or methods can be added as needed
 
     def __str__(self):
         return self.name
