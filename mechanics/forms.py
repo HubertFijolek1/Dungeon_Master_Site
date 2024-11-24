@@ -1,5 +1,5 @@
 from django import forms
-from .models import Encounter
+from .models import Encounter, Loot
 
 class EncounterForm(forms.ModelForm):
     class Meta:
@@ -8,3 +8,8 @@ class EncounterForm(forms.ModelForm):
         widgets = {
             'monsters': forms.CheckboxSelectMultiple(),
         }
+
+class LootForm(forms.ModelForm):
+    class Meta:
+        model = Loot
+        fields = ['name', 'description', 'type', 'value', 'encounter']

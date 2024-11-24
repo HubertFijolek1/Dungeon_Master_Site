@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Loot Items</h1>
+<a href="{% url 'mechanics:loot_create' %}">Create New Loot Item</a>
+<ul>
+    {% for loot in loot_items %}
+    <li>
+        <a href="{% url 'mechanics:loot_detail' loot.id %}">{{ loot.name }}</a> ({{ loot.type }})
+    </li>
+    {% empty %}
+    <li>No loot items available.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

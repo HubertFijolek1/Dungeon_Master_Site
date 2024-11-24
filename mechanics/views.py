@@ -3,7 +3,26 @@ from .models import DiceRoll, Encounter, Loot
 from .serializers import DiceRollSerializer, EncounterSerializer, LootSerializer
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import EncounterForm
+from .forms import EncounterForm, LootForm
+
+# Loot Views
+class LootListView(ListView):
+    model = Loot
+    template_name = 'mechanics/loot_list.html'
+    context_object_name = 'loot_items'
+
+class LootDetailView(DetailView):
+    model = Loot
+    template_name = 'mechanics/loot_detail.html'
+    context_object_name = 'loot'
+
+class LootCreateView(LoginRequiredMixin, CreateView):
+    model = Loot
+    form_class = LootForm
+    template_name = 'mechanics/loot_form.html'
+
+    def form_valid(self, form):
+        return super().form_valid(form)
 
 # Encounter Views
 class EncounterListView(ListView):
