@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from campaigns.models import Campaign
 
 User = get_user_model()
 
@@ -11,3 +12,15 @@ class Message(models.Model):
 
     def __str__(self):
         return f"Message from {self.sender.username} to {self.receiver.username} at {self.timestamp}"
+
+
+class ForumPost(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='forum_posts')
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='forum_posts')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
