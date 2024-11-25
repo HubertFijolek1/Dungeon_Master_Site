@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'characters',
     'world',
     'mechanics',
+    'interactions'
 ]
 
 MIDDLEWARE = [
