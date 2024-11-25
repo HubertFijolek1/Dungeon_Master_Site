@@ -40,3 +40,15 @@ class PollOption(models.Model):
 
     def __str__(self):
         return self.option_text
+
+class PollVote(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='poll_votes')
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='votes')
+    selected_option = models.ForeignKey(PollOption, on_delete=models.CASCADE, related_name='votes')
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'poll')
+
+    def __str__(self):
+        return f"{self.user.username} voted on '{self.poll.question}'"
