@@ -16,3 +16,14 @@ class ForumPostAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'campaign', 'created_at')
     search_fields = ('title', 'content', 'author__username', 'campaign__name')
     list_filter = ('created_at', 'campaign')
+
+class PollOptionInline(admin.TabularInline):
+    model = PollOption
+    extra = 1
+
+@admin.register(Poll)
+class PollAdmin(admin.ModelAdmin):
+    list_display = ('question', 'campaign', 'created_at')
+    search_fields = ('question', 'campaign__name')
+    list_filter = ('created_at', 'campaign')
+    inlines = [PollOptionInline]
