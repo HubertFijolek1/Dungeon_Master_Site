@@ -10,3 +10,9 @@ class MessageAdmin(admin.ModelAdmin):
     def short_content(self, obj):
         return obj.content[:50]
     short_content.short_description = 'Content'
+
+@admin.register(ForumPost)
+class ForumPostAdmin(admin.ModelAdmin):
+    list_display = ('title', 'author', 'campaign', 'created_at')
+    search_fields = ('title', 'content', 'author__username', 'campaign__name')
+    list_filter = ('created_at', 'campaign')
