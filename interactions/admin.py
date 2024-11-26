@@ -27,3 +27,9 @@ class PollAdmin(admin.ModelAdmin):
     search_fields = ('question', 'campaign__name')
     list_filter = ('created_at', 'campaign')
     inlines = [PollOptionInline]
+
+@admin.register(PollVote)
+class PollVoteAdmin(admin.ModelAdmin):
+    list_display = ('user', 'poll', 'selected_option', 'timestamp')
+    search_fields = ('user__username', 'poll__question', 'selected_option__option_text')
+    list_filter = ('timestamp', 'poll')
