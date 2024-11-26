@@ -18,6 +18,7 @@ urlpatterns = [
     path('characters/', include(('characters.urls', 'characters'), namespace='characters')),
     path('world/', include(('world.urls', 'world'), namespace='world')),
     path('mechanics/', include(('mechanics.urls', 'mechanics'), namespace='mechanics')),
+    path('interactions/', include(('interactions.urls', 'interactions'), namespace='interactions')),
     path('health/', health_check, name='health_check'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('dm/dashboard/', DMDashboardView.as_view(), name='dm_dashboard'),
