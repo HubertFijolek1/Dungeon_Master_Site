@@ -25,5 +25,6 @@ urlpatterns = [
     path('player/dashboard/', PlayerDashboardView.as_view(), name='player_dashboard'),
 ]
 
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
