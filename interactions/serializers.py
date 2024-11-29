@@ -32,12 +32,35 @@ class PollOptionSerializer(serializers.ModelSerializer):
         fields = ['id', 'option_text', 'votes_count']
 
 class PollSerializer(serializers.ModelSerializer):
-    options = PollOptionSerializer(many=True, read_only=True)
+    options = PollOptionSerializer(many=True)
     total_votes = serializers.IntegerField(source='votes.count', read_only=True)
 
     class Meta:
         model = Poll
         fields = ['id', 'question', 'campaign', 'created_at', 'updated_at', 'options', 'total_votes']
+
+    def create(self, validated_data):
+        options_data = validated_data.pop('options')
+        poll = Poll.objects.create(**validated_data)
+        for option_data in options_data:
+            PollOption.objects.create(poll=poll, **option_data)
+        return poll
+
+    def update(self, instance, validated_data):
+        options_data = validated_data.pop('options', None)
+        instance.question = validated_data.get('question', instance.question)
+        instance.save()
+        if options_data:
+            # Update existing options and create new ones
+            for option_data in options_data:
+                option_id = option_data.get('id', None)
+                if option_id:
+                    option = PollOption.objects.get(id=option_id, poll=instance)
+                    option.option_text = option_data.get('option_text', option.option_text)
+                    option.save()
+                else:
+                    PollOption.objects.create(poll=instance, **option_data)
+        return instance
 
 class PollVoteSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
@@ -46,3 +69,4 @@ class PollVoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = PollVote
         fields = '__all__'
+
