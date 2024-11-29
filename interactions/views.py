@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions
-from .models import Message, ForumPost, Poll
-from .serializers import MessageSerializer, ForumPostSerializer, PollSerializer
+from .models import Message, ForumPost, Poll, PollVote
+from .serializers import MessageSerializer, ForumPostSerializer, PollSerializer, PollVoteSerializer
 
 class IsParticipant(permissions.BasePermission):
     """
@@ -49,3 +49,14 @@ class PollViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save()
+
+class PollVoteViewSet(viewsets.ModelViewSet):
+    queryset = PollVote.objects.all()
+    serializer_class = PollVoteSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return PollVote.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
