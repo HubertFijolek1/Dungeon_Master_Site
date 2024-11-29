@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Inbox</h1>
+<a href="{% url 'interactions:message_create' %}">Compose Message</a>
+<ul>
+    {% for message in messages %}
+    <li>
+        <a href="{% url 'interactions:message_detail' message.id %}">{{ message.sender.username }}</a>:
+        {{ message.content|truncatewords:10 }} - {{ message.timestamp }}
+    </li>
+    {% empty %}
+    <li>No messages.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

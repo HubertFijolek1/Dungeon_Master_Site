@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Message from {{ message.sender.username }}</h1>
+<p>{{ message.content }}</p>
+<p>Sent on: {{ message.timestamp }}</p>
+<a href="{% url 'interactions:message_create' %}?reply_to={{ message.sender.id }}">Reply</a>
+{% endblock %}

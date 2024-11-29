@@ -1,6 +1,10 @@
 from rest_framework import viewsets, permissions
 from .models import Message, ForumPost, Poll, PollVote
 from .serializers import MessageSerializer, ForumPostSerializer, PollSerializer, PollVoteSerializer
+from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from .forms import MessageForm
 
 class IsParticipant(permissions.BasePermission):
     """
@@ -60,3 +64,31 @@ class PollVoteViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+class MessageListView(LoginRequiredMixin, ListView):
+    model = Message
+    template_name = 'interactions/message_list.html'
+    context_object_name = 'messages'
+
+    def get_queryset(self):
+        return Message.objects.filter(receiver=self.request.user).order_by('-timestamp')
+
+class MessageDetailView(LoginRequiredMixin, DetailView):
+    model = Message
+    template_name = 'interactions/message_detail.html'
+    context_object_name = 'message'
+
+    def get_queryset(self):
+        return Message.objects.filter(
+            (Q(sender=self.request.user) | Q(receiver=self.request.user))
+        )
+
+class MessageCreateView(LoginRequiredMixin, CreateView):
+    model = Message
+    form_class = MessageForm
+    template_name = 'interactions/message_form.html'
+    success_url = reverse_lazy('interactions:message_list')
+
+    def form_valid(self, form):
+        form.instance.sender = self.request.user
+        return super().form_valid(form)

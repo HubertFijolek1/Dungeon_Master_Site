@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import MessageViewSet, ForumPostViewSet, PollViewSet, PollVoteViewSet
+from .views import MessageViewSet, ForumPostViewSet, PollViewSet, PollVoteViewSet, MessageListView, MessageDetailView, MessageCreateView
 
 router = DefaultRouter()
 router.register(r'messages', MessageViewSet, basename='message')
@@ -16,3 +16,9 @@ urlpatterns = [
 ]
 
 
+urlpatterns += [
+    # Message URLs
+    path('messages/', MessageListView.as_view(), name='message_list'),
+    path('messages/<int:pk>/', MessageDetailView.as_view(), name='message_detail'),
+    path('messages/compose/', MessageCreateView.as_view(), name='message_create'),
+]
