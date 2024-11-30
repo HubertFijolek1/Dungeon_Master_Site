@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Create Poll</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <h2>Options</h2>
+    <div id="options">
+        <div>
+            <input type="text" name="options" placeholder="Option text">
+        </div>
+    </div>
+    <button type="button" onclick="addOption()">Add Option</button>
+    <button type="submit">Create Poll</button>
+</form>
+
+<script>
+    function addOption() {
+        const optionsDiv = document.getElementById('options');
+        const newOption = document.createElement('div');
+        newOption.innerHTML = '<input type="text" name="options" placeholder="Option text">';
+        optionsDiv.appendChild(newOption);
+    }
+</script>
+{% endblock %}

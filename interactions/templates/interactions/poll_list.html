@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Polls</h1>
+<a href="{% url 'interactions:poll_create' %}">Create New Poll</a>
+<ul>
+    {% for poll in polls %}
+    <li>
+        <a href="{% url 'interactions:poll_detail' poll.id %}">{{ poll.question }}</a> - {{ poll.created_at }}
+    </li>
+    {% empty %}
+    <li>No polls available.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

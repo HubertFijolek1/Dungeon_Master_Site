@@ -1,10 +1,11 @@
 from rest_framework import viewsets, permissions
-from .models import Message, ForumPost, Poll, PollVote,
+from .models import Message, ForumPost, Poll, PollVote, PollOption
 from .serializers import MessageSerializer, ForumPostSerializer, PollSerializer, PollVoteSerializer
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from .forms import MessageForm, ForumPostForm
+from django.shortcuts import get_object_or_404, redirect
+from .forms import MessageForm, ForumPostForm, PollForm
 
 class IsParticipant(permissions.BasePermission):
     """
@@ -111,3 +112,37 @@ class ForumPostCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+lass PollListView(ListView):
+    model = Poll
+    template_name = 'interactions/poll_list.html'
+    context_object_name = 'polls'
+
+class PollDetailView(DetailView):
+    model = Poll
+    template_name = 'interactions/poll_detail.html'
+    context_object_name = 'poll'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_vote = PollVote.objects.filter(user=self.request.user, poll=self.object).first()
+        context['user_vote'] = user_vote
+        return context
+
+class PollCreateView(LoginRequiredMixin, CreateView):
+    model = Poll
+    form_class = PollForm
+    template_name = 'interactions/poll_form.html'
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+def vote_poll(request, poll_id):
+    poll = get_object_or_404(Poll, id=poll_id)
+    if request.method == 'POST':
+        option_id = request.POST.get('option')
+        if option_id:
+            selected_option = get_object_or_404(PollOption, id=option_id, poll=poll)
+            if not PollVote.objects.filter(user=request.user, poll=poll).exists():
+                PollVote.objects.create(user=request.user, poll=poll, selected_option=selected_option)
+        return redirect('interactions:poll_detail', pk=poll_id)

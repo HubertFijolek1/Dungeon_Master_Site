@@ -1,7 +1,9 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import MessageViewSet, ForumPostViewSet, PollViewSet, PollVoteViewSet, MessageListView, MessageDetailView, MessageCreateView,ForumPostListView, ForumPostDetailView, ForumPostCreateView,
+from .views import (MessageViewSet, ForumPostViewSet, PollViewSet, PollVoteViewSet, MessageListView, MessageDetailView, MessageCreateView,ForumPostListView, ForumPostDetailView, ForumPostCreateView,
 
+PollListView, PollDetailView, PollCreateView, vote_poll,
+                    )
 router = DefaultRouter()
 router.register(r'messages', MessageViewSet, basename='message')
 router.register(r'forum-posts', ForumPostViewSet, basename='forum-post')
@@ -28,4 +30,12 @@ urlpatterns += [
     path('forum-posts/', ForumPostListView.as_view(), name='forum_post_list'),
     path('forum-posts/<int:pk>/', ForumPostDetailView.as_view(), name='forum_post_detail'),
     path('forum-posts/create/', ForumPostCreateView.as_view(), name='forum_post_create'),
+]
+
+urlpatterns += [
+    # Poll URLs
+    path('polls/', PollListView.as_view(), name='poll_list'),
+    path('polls/<int:pk>/', PollDetailView.as_view(), name='poll_detail'),
+    path('polls/create/', PollCreateView.as_view(), name='poll_create'),
+    path('polls/<int:poll_id>/vote/', vote_poll, name='vote_poll'),
 ]
