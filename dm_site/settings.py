@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     # Third-party apps
     'rest_framework',
     'corsheaders',
+    'channels',
 
     # Local apps
     'users',
@@ -69,7 +70,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'dm_site.wsgi.application'
-# ASGI_APPLICATION = 'dm_site.asgi.application'
+ASGI_APPLICATION = 'dm_site.asgi.application'
 
 
 # Database
@@ -117,6 +118,12 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     # Add other allowed origins
 ]
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
 
 # REST Framework settings
 REST_FRAMEWORK = {

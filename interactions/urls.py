@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (MessageViewSet, ForumPostViewSet, PollViewSet, PollVoteViewSet, MessageListView, MessageDetailView, MessageCreateView,ForumPostListView, ForumPostDetailView, ForumPostCreateView,
-
+chat_view,
 PollListView, PollDetailView, PollCreateView, vote_poll,
                     )
 router = DefaultRouter()
@@ -15,6 +15,7 @@ app_name = 'interactions'
 
 urlpatterns = [
     path('api/', include(router.urls)),
+    path('chat/', chat_view, name='chat'),
 ]
 
 

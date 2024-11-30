@@ -4,8 +4,11 @@ from .serializers import MessageSerializer, ForumPostSerializer, PollSerializer,
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from .forms import MessageForm, ForumPostForm, PollForm
+
+def chat_view(request):
+    return render(request, 'interactions/chat.html')
 
 class IsParticipant(permissions.BasePermission):
     """
