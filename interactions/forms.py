@@ -1,6 +1,7 @@
 from django import forms
 from .models import Message, ForumPost, Poll, PollOption
 from django.contrib.auth import get_user_model
+from django.forms.models import inlineformset_factory
 
 User = get_user_model()
 
@@ -36,3 +37,10 @@ class PollForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['campaign'].required = True
 
+PollOptionFormSet = inlineformset_factory(
+    Poll,
+    PollOption,
+    fields=('option_text',),
+    extra=2,
+    can_delete=True
+)

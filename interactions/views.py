@@ -116,7 +116,7 @@ class ForumPostCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-lass PollListView(ListView):
+class PollListView(ListView):
     model = Poll
     template_name = 'interactions/poll_list.html'
     context_object_name = 'polls'
@@ -137,8 +137,24 @@ class PollCreateView(LoginRequiredMixin, CreateView):
     form_class = PollForm
     template_name = 'interactions/poll_form.html'
 
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        if self.request.POST:
+            data['formset'] = PollOptionFormSet(self.request.POST)
+        else:
+            data['formset'] = PollOptionFormSet()
+        return data
+
     def form_valid(self, form):
-        return super().form_valid(form)
+        context = self.get_context_data()
+        formset = context['formset']
+        if formset.is_valid():
+            self.object = form.save()
+            formset.instance = self.object
+            formset.save()
+            return super().form_valid(form)
+        else:
+            return self.form_invalid(form)
 
 def vote_poll(request, poll_id):
     poll = get_object_or_404(Poll, id=poll_id)
