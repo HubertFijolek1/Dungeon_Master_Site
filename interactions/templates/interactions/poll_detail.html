@@ -1,0 +1,31 @@
+{% extends 'interactions/base.html' %}
+
+{% block content %}
+<h1>{{ poll.question }}</h1>
+
+{% if user.is_authenticated %}
+    {% if user_vote %}
+        <p>You voted for: {{ user_vote.selected_option.option_text }}</p>
+    {% else %}
+        <form method="post" action="{% url 'interactions:vote_poll' poll.id %}">
+            {% csrf_token %}
+            {% for option in poll.options.all %}
+            <div>
+                <input type="radio" name="option" value="{{ option.id }}" id="option{{ option.id }}">
+                <label for="option{{ option.id }}">{{ option.option_text }}</label>
+            </div>
+            {% endfor %}
+            <button type="submit">Vote</button>
+        </form>
+    {% endif %}
+{% else %}
+    <p>You must be logged in to vote.</p>
+{% endif %}
+
+<h2>Results:</h2>
+<ul>
+    {% for option in poll.options.all %}
+    <li>{{ option.option_text }} - {{ option.votes.count }} votes</li>
+    {% endfor %}
+</ul>
+{% endblock %}

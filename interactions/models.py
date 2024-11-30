@@ -13,7 +13,6 @@ class Message(models.Model):
     def __str__(self):
         return f"Message from {self.sender.username} to {self.receiver.username} at {self.timestamp}"
 
-
 class ForumPost(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()

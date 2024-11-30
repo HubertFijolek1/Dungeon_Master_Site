@@ -1,7 +1,7 @@
 from django import forms
 from .models import Message, ForumPost, Poll, PollOption
-from django.contrib.auth import get_user_model
 from django.forms.models import inlineformset_factory
+from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
@@ -14,7 +14,6 @@ class MessageForm(forms.ModelForm):
             'content': forms.Textarea(attrs={'rows': 4}),
         }
 
-
 class ForumPostForm(forms.ModelForm):
     class Meta:
         model = ForumPost
@@ -23,19 +22,10 @@ class ForumPostForm(forms.ModelForm):
             'content': forms.Textarea(attrs={'rows': 5}),
         }
 
-
-
-class PollOptionFormSet(forms.BaseInlineFormSet):
-    pass
-
 class PollForm(forms.ModelForm):
     class Meta:
         model = Poll
         fields = ['question', 'campaign']
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['campaign'].required = True
 
 PollOptionFormSet = inlineformset_factory(
     Poll,

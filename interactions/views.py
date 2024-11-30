@@ -1,14 +1,19 @@
-from rest_framework import viewsets, permissions
-from .models import Message, ForumPost, Poll, PollVote, PollOption
-from .serializers import MessageSerializer, ForumPostSerializer, PollSerializer, PollVoteSerializer
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
-from django.shortcuts import get_object_or_404, redirect, render
-from .forms import MessageForm, ForumPostForm, PollForm
+from django.db.models import Q
+from rest_framework import viewsets, permissions
+from .models import Message, ForumPost, Poll, PollOption, PollVote
+from .serializers import (
+    MessageSerializer, ForumPostSerializer, PollSerializer, PollVoteSerializer
+)
+from .forms import MessageForm, ForumPostForm, PollForm, PollOptionFormSet
+from django.contrib.auth import get_user_model
 
-def chat_view(request):
-    return render(request, 'interactions/chat.html')
+User = get_user_model()
+
+# Permissions
 
 class IsParticipant(permissions.BasePermission):
     """
@@ -18,29 +23,29 @@ class IsParticipant(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return obj.sender == request.user or obj.receiver == request.user
 
-class MessageViewSet(viewsets.ModelViewSet):
-    serializer_class = MessageSerializer
-    permission_classes = [permissions.IsAuthenticated, IsParticipant]
-
-    def get_queryset(self):
-        return Message.objects.filter(sender=self.request.user) | Message.objects.filter(receiver=self.request.user)
-
-    def perform_create(self, serializer):
-        serializer.save(sender=self.request.user)
-
-
 class IsAuthorOrReadOnly(permissions.BasePermission):
     """
     Custom permission to only allow authors to edit or delete their own posts.
     """
 
     def has_object_permission(self, request, view, obj):
-        # Read permissions are allowed to any request,
-        # so we'll always allow GET, HEAD or OPTIONS requests.
         if request.method in permissions.SAFE_METHODS:
             return True
-        # Write permissions are only allowed to the author of the post.
         return obj.author == request.user
+
+# API ViewSets
+
+class MessageViewSet(viewsets.ModelViewSet):
+    serializer_class = MessageSerializer
+    permission_classes = [permissions.IsAuthenticated, IsParticipant]
+
+    def get_queryset(self):
+        return Message.objects.filter(
+            Q(sender=self.request.user) | Q(receiver=self.request.user)
+        )
+
+    def perform_create(self, serializer):
+        serializer.save(sender=self.request.user)
 
 class ForumPostViewSet(viewsets.ModelViewSet):
     queryset = ForumPost.objects.all()
@@ -55,9 +60,6 @@ class PollViewSet(viewsets.ModelViewSet):
     serializer_class = PollSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
 
-    def perform_create(self, serializer):
-        serializer.save()
-
 class PollVoteViewSet(viewsets.ModelViewSet):
     queryset = PollVote.objects.all()
     serializer_class = PollVoteSerializer
@@ -68,6 +70,8 @@ class PollVoteViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+# Django Views
 
 class MessageListView(LoginRequiredMixin, ListView):
     model = Message
@@ -84,7 +88,7 @@ class MessageDetailView(LoginRequiredMixin, DetailView):
 
     def get_queryset(self):
         return Message.objects.filter(
-            (Q(sender=self.request.user) | Q(receiver=self.request.user))
+            Q(sender=self.request.user) | Q(receiver=self.request.user)
         )
 
 class MessageCreateView(LoginRequiredMixin, CreateView):
@@ -128,7 +132,9 @@ class PollDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user_vote = PollVote.objects.filter(user=self.request.user, poll=self.object).first()
+        user_vote = None
+        if self.request.user.is_authenticated:
+            user_vote = PollVote.objects.filter(user=self.request.user, poll=self.object).first()
         context['user_vote'] = user_vote
         return context
 
@@ -165,3 +171,6 @@ def vote_poll(request, poll_id):
             if not PollVote.objects.filter(user=request.user, poll=poll).exists():
                 PollVote.objects.create(user=request.user, poll=poll, selected_option=selected_option)
         return redirect('interactions:poll_detail', pk=poll_id)
+
+def chat_view(request):
+    return render(request, 'interactions/chat.html')

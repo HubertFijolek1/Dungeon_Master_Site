@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class MessageSerializer(serializers.ModelSerializer):
     sender = UserSerializer(read_only=True)
-    receiver = UserSerializer(read_only=True)
+    receiver = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
     class Meta:
         model = Message
@@ -63,7 +63,8 @@ class PollSerializer(serializers.ModelSerializer):
         return instance
 
 class PollVoteSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source='user.username')
+    user = UserSerializer(read_only=True)
+    selected_option = serializers.PrimaryKeyRelatedField(queryset=PollOption.objects.all())
 
     class Meta:
         model = PollVote
@@ -75,5 +76,3 @@ class PollVoteSerializer(serializers.ModelSerializer):
         if PollVote.objects.filter(user=user, poll=poll).exists():
             raise serializers.ValidationError("You have already voted in this poll.")
         return data
-
-
