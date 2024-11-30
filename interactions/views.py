@@ -1,10 +1,10 @@
 from rest_framework import viewsets, permissions
-from .models import Message, ForumPost, Poll, PollVote
+from .models import Message, ForumPost, Poll, PollVote,
 from .serializers import MessageSerializer, ForumPostSerializer, PollSerializer, PollVoteSerializer
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from .forms import MessageForm
+from .forms import MessageForm, ForumPostForm
 
 class IsParticipant(permissions.BasePermission):
     """
@@ -91,4 +91,23 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.sender = self.request.user
+        return super().form_valid(form)
+
+class ForumPostListView(ListView):
+    model = ForumPost
+    template_name = 'interactions/forum_post_list.html'
+    context_object_name = 'forum_posts'
+
+class ForumPostDetailView(DetailView):
+    model = ForumPost
+    template_name = 'interactions/forum_post_detail.html'
+    context_object_name = 'forum_post'
+
+class ForumPostCreateView(LoginRequiredMixin, CreateView):
+    model = ForumPost
+    form_class = ForumPostForm
+    template_name = 'interactions/forum_post_form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
         return super().form_valid(form)

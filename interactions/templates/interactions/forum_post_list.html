@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Forum Posts</h1>
+<a href="{% url 'interactions:forum_post_create' %}">Create New Post</a>
+<ul>
+    {% for post in forum_posts %}
+    <li>
+        <a href="{% url 'interactions:forum_post_detail' post.id %}">{{ post.title }}</a> by {{ post.author.username }} - {{ post.created_at }}
+    </li>
+    {% empty %}
+    <li>No forum posts available.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

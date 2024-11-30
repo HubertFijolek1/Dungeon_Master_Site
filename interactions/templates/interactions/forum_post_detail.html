@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ forum_post.title }}</h1>
+<p>By {{ forum_post.author.username }} on {{ forum_post.created_at }}</p>
+<div>
+    {{ forum_post.content }}
+</div>
+{% endblock %}
