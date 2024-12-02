@@ -30,6 +30,7 @@ INSTALLED_APPS = [
 
 
     # Local apps
+    'resources',
     'users',
     'campaigns',
     'characters',
