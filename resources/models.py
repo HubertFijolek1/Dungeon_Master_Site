@@ -36,3 +36,28 @@ class Ability(models.Model):
 
     def __str__(self):
         return self.name
+
+class Item(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    TYPE_CHOICES = [
+        ('Weapon', 'Weapon'),
+        ('Armor', 'Armor'),
+        ('Consumable', 'Consumable'),
+        ('Miscellaneous', 'Miscellaneous'),
+    ]
+    RARITY_CHOICES = [
+        ('Common', 'Common'),
+        ('Uncommon', 'Uncommon'),
+        ('Rare', 'Rare'),
+        ('Very Rare', 'Very Rare'),
+        ('Legendary', 'Legendary'),
+    ]
+    type = models.CharField(max_length=50, choices=TYPE_CHOICES)
+    rarity = models.CharField(max_length=50, choices=RARITY_CHOICES)
+    value = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
